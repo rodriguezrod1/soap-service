@@ -11,7 +11,7 @@ class StoreWalletRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class StoreWalletRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'document' => 'required|string|exists:clients,document',
+            'phone' => 'required|string|exists:clients,phone',
+            'amount' => 'required|numeric|min:0.01',
         ];
     }
 }
