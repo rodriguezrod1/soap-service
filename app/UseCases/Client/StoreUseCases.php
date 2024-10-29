@@ -2,6 +2,7 @@
 
 namespace App\UseCases\Client;
 
+use App\Http\Resources\Client\StoreResource;
 use App\Services\Client\StoreService;
 
 class StoreUseCases
@@ -20,6 +21,7 @@ class StoreUseCases
 
     public function store($request)
     {
-        return $this->storeService->store($request);
+        $response =  $this->storeService->store($request);
+        return new StoreResource($response);
     }
 }
