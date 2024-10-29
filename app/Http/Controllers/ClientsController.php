@@ -24,7 +24,7 @@ class ClientsController extends Controller
     public function store(StoreClientsRequest $request)
     {
         try {
-            $client = $this->storeUseCases->store($request->validated());
+            $client = $this->storeUseCases->execute($request->validated());
             return $this->successResponse($client, 'Client registered successfully');
         } catch (\Exception $e) {
             return $this->errorResponse($e, 500);

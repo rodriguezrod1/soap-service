@@ -22,8 +22,7 @@ class StoreWalletRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'document' => 'required|string|exists:clients,document',
-            'phone' => 'required|string|exists:clients,phone',
+            'client_id' => 'required|integer|exists:clients,id',
             'amount' => 'required|numeric|min:0.01',
         ];
     }

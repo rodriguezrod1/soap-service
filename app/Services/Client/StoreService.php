@@ -2,7 +2,7 @@
 
 namespace App\Services\Client;
 
-use App\Models\Client;
+use App\Models\{Client, Wallet};
 
 class StoreService
 {
@@ -13,6 +13,7 @@ class StoreService
         $client->email = $request->email;
         $client->phone = $request->phone;
         $client->save();
+        Wallet::create(['client_id' => $client->id, 'balance' => 0]);
         return $client;
     }
 }
