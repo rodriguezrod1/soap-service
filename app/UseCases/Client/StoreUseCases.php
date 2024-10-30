@@ -21,7 +21,7 @@ class StoreUseCases
 
     public function execute($request)
     {
-        $response =  $this->storeService->store($request);
+        $response =  $this->storeService->execute($request);
         return new StoreResource($response);
     }
 }

@@ -2,6 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+
+Route::post('/soap', [App\Http\Controllers\SOAP\WalletController::class, 'handleSoapRequest']);

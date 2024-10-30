@@ -2,13 +2,13 @@
 
 namespace App\UseCases\Wallet;
 
-use App\Services\Wallet\RechargeWalletService;
+use App\Services\Wallet\MakePaymentService;
 
-class RechargeWalletUseCase
+class MakePaymentUseCase
 {
     protected $walletService;
 
-    public function __construct(RechargeWalletService $walletService)
+    public function __construct(MakePaymentService $walletService)
     {
         $this->walletService = $walletService;
     }

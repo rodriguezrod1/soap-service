@@ -3,15 +3,19 @@
 namespace App\Services\Wallet;
 
 use App\Services\Client\FindClientByDocumentAndPhoneService;
+use App\Services\Wallet\TransactionService;
 
 class RechargeWalletService
 {
 
     private $clientFinder;
+    private $transactionService;
 
-    public function __construct(FindClientByDocumentAndPhoneService $clientFinder)
+
+    public function __construct(FindClientByDocumentAndPhoneService $clientFinder, TransactionService $transactionService)
     {
         $this->clientFinder = $clientFinder;
+        $this->transactionService = $transactionService;
     }
 
 
@@ -29,6 +33,8 @@ class RechargeWalletService
 
         $client->balance += $amount;
         $client->save();
+
+        $this->transactionService->createDepositTransaction($client->id, $amount);
 
         return  $client;
     }

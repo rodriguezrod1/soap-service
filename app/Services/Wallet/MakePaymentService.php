@@ -35,6 +35,7 @@ class MakePaymentService
 
         Mail::to($client->email)->send(new PaymentTokenMail($token));
 
+
         Cache::put("payment_token_{$sessionId}", $token, now()->addMinutes(10));
 
         return ['session_id' => $sessionId];

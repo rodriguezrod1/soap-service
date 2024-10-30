@@ -4,15 +4,19 @@ namespace App\Services\Wallet;
 
 use Illuminate\Support\Facades\Cache;
 use App\Services\Client\FindClientByDocumentAndPhoneService;
+use App\Services\Wallet\TransactionService;
 
 class ConfirmPaymentService
 {
 
     private $clientFinder;
+    private $transactionService;
 
-    public function __construct(FindClientByDocumentAndPhoneService $clientFinder)
+
+    public function __construct(FindClientByDocumentAndPhoneService $clientFinder, TransactionService $transactionService)
     {
         $this->clientFinder = $clientFinder;
+        $this->transactionService = $transactionService;
     }
 
 
@@ -38,6 +42,8 @@ class ConfirmPaymentService
         $client->save();
 
         Cache::forget("payment_token_{$sessionId}");
+
+        $this->transactionService->createWithdrawalTransaction($client->id, $amount);
 
         return $client;
     }

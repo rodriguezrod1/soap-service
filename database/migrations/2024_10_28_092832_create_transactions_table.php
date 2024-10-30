@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained('clients');
+            $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->decimal('amount', 10, 2);
-            $table->boolean('type'); // 1 for credit, 0 for debit
+            $table->enum('type', ['deposit', 'withdrawal']);
+            $table->enum('status', ['pending', 'confirmed', 'failed']);
             $table->timestamps();
+
+            $table->index(['client_id', 'type', 'status']);
         });
     }
 
