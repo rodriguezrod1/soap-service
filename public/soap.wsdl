@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:tns="http://localhost:8001/soap"
+             targetNamespace="http://localhost:8001/soap">
+
+    <types>
+        <xsd:schema targetNamespace="http://localhost:8001/soap">
+
+            <!-- Tipo para el request de registro de cliente -->
+            <xsd:complexType name="RegisterClientRequest">
+                <xsd:sequence>
+                    <xsd:element name="name" type="xsd:string"/>
+                    <xsd:element name="email" type="xsd:string"/>
+                    <xsd:element name="phone" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="RegisterClientResponse">
+                <xsd:sequence>
+                    <xsd:element name="client" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <!-- Tipo para el request de consulta de saldo -->
+            <xsd:complexType name="CheckBalanceRequest">
+                <xsd:sequence>
+                    <xsd:element name="document" type="xsd:string"/>
+                    <xsd:element name="phone" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="CheckBalanceResponse">
+                <xsd:sequence>
+                    <xsd:element name="balance" type="xsd:decimal"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <!-- Tipo para el request de pago -->
+            <xsd:complexType name="MakePaymentRequest">
+                <xsd:sequence>
+                    <xsd:element name="document" type="xsd:string"/>
+                    <xsd:element name="phone" type="xsd:string"/>
+                    <xsd:element name="amount" type="xsd:decimal"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="MakePaymentResponse">
+                <xsd:sequence>
+                    <xsd:element name="sessionId" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <!-- Tipo para el request de confirmación de pago -->
+            <xsd:complexType name="ConfirmPaymentRequest">
+                <xsd:sequence>
+                    <xsd:element name="sessionId" type="xsd:string"/>
+                    <xsd:element name="token" type="xsd:string"/>
+                    <xsd:element name="document" type="xsd:string"/>
+                    <xsd:element name="phone" type="xsd:string"/>
+                    <xsd:element name="amount" type="xsd:decimal"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="ConfirmPaymentResponse">
+                <xsd:sequence>
+                    <xsd:element name="client" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <!-- Tipo para el request de recarga de billetera -->
+            <xsd:complexType name="RechargeWalletRequest">
+                <xsd:sequence>
+                    <xsd:element name="document" type="xsd:string"/>
+                    <xsd:element name="phone" type="xsd:string"/>
+                    <xsd:element name="amount" type="xsd:decimal"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="RechargeWalletResponse">
+                <xsd:sequence>
+                    <xsd:element name="client" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+
+    <message name="RegisterClientRequest">
+        <part name="parameters" element="tns:RegisterClientRequest"/>
+    </message>
+
+    <message name="RegisterClientResponse">
+        <part name="parameters" element="tns:RegisterClientResponse"/>
+    </message>
+
+    <message name="CheckBalanceRequest">
+        <part name="parameters" element="tns:CheckBalanceRequest"/>
+    </message>
+
+    <message name="CheckBalanceResponse">
+        <part name="parameters" element="tns:CheckBalanceResponse"/>
+    </message>
+
+    <message name="MakePaymentRequest">
+        <part name="parameters" element="tns:MakePaymentRequest"/>
+    </message>
+
+    <message name="MakePaymentResponse">
+        <part name="parameters" element="tns:MakePaymentResponse"/>
+    </message>
+
+    <message name="ConfirmPaymentRequest">
+        <part name="parameters" element="tns:ConfirmPaymentRequest"/>
+    </message>
+
+    <message name="ConfirmPaymentResponse">
+        <part name="parameters" element="tns:ConfirmPaymentResponse"/>
+    </message>
+
+    <message name="RechargeWalletRequest">
+        <part name="parameters" element="tns:RechargeWalletRequest"/>
+    </message>
+
+    <message name="RechargeWalletResponse">
+        <part name="parameters" element="tns:RechargeWalletResponse"/>
+    </message>
+
+    <portType name="WalletPortType">
+        <operation name="registerClient">
+            <input message="tns:RegisterClientRequest"/>
+            <output message="tns:RegisterClientResponse"/>
+        </operation>
+
+        <operation name="checkBalance">
+            <input message="tns:CheckBalanceRequest"/>
+            <output message="tns:CheckBalanceResponse"/>
+        </operation>
+
+        <operation name="makePayment">
+            <input message="tns:MakePaymentRequest"/>
+            <output message="tns:MakePaymentResponse"/>
+        </operation>
+
+        <operation name="confirmPayment">
+            <input message="tns:ConfirmPaymentRequest"/>
+            <output message="tns:ConfirmPaymentResponse"/>
+        </operation>
+
+        <operation name="rechargeWallet">
+            <input message="tns:RechargeWalletRequest"/>
+            <output message="tns:RechargeWalletResponse"/>
+        </operation>
+    </portType>
+
+    <binding name="WalletBinding" type="tns:WalletPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <operation name="registerClient">
+            <soap:operation soapAction="registerClient"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
+
+        <operation name="checkBalance">
+            <soap:operation soapAction="checkBalance"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
+
+        <operation name="makePayment">
+            <soap:operation soapAction="makePayment"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
+
+        <operation name="confirmPayment">
+            <soap:operation soapAction="confirmPayment"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
+
+        <operation name="rechargeWallet">
+            <soap:operation soapAction="rechargeWallet"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
+    </binding>
+
+    <service name="WalletService">
+        <port name="WalletPort" binding="tns:WalletBinding">
+            <soap:address location="http://localhost:8001/soap"/>
+        </port>
+    </service>
+</definitions>

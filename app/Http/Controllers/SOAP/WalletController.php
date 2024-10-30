@@ -12,7 +12,9 @@ use App\UseCases\Wallet\{
     RechargeWalletUseCase
 };
 use App\Http\Requests\StoreClientsRequest;
+use Illuminate\Support\Facades\Storage;
 use SoapServer;
+use SoapFault;
 
 
 class WalletController extends Controller
@@ -38,10 +40,52 @@ class WalletController extends Controller
     }
 
 
-    public function handleSoapRequest(SoapServer $soapServer)
+    public function handleSoapRequest(Request $request)
     {
-        $soapServer->handle();
+        if (!Storage::exists('soap.wsdl')) {
+            throw new \Exception('WSDL file not found');
+        }
+
+        $wsdlContent = Storage::get('soap.wsdl');
+
+        // Si se solicita el WSDL
+        if ($request->query('wsdll')) {
+            return response($wsdlContent)->header('Content-Type', 'text/xml');
+        }
+
+        // Configurar el servidor SOAP
+        $options = [
+            'uri' => 'http://localhost:8001/soap',
+            'location' => 'http://localhost:8001/soap'
+        ];
+
+        $server = new SoapServer(null, $options);
+
+        // Registrar las funciones del servidor SOAP
+        $server->addFunction([
+            'registerClient',
+            'checkBalance',
+            'makePayment',
+            'confirmPayment',
+            'rechargeWallet'
+        ]);
+
+        // Implementar las funciones SOAP
+        $server->setObject($this);
+
+        // Manejar la solicitud SOAP
+        ob_start();
+        try {
+            $server->handle($request->getContent());
+            $response = ob_get_clean();
+        } catch (SoapFault $e) {
+            $response = $e->getMessage();
+        }
+
+        return response($response)->header('Content-Type', 'text/xml');
     }
+
+
 
     public function checkBalance(Request $request)
     {
