@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreClientsRequest;
 use App\UseCases\Client\StoreUseCases;
-
+use SoapServer;
 
 class ClientsController extends Controller
 {
@@ -16,6 +16,15 @@ class ClientsController extends Controller
         $this->storeUseCases = $storeUseCases;
     }
 
+
+    public function index($request)
+    {
+        $server = new SoapServer(null, [
+            'uri' => 'http://localhost/soap-register',
+        ]);
+        $server->setObject($this->store($request));
+        $server->handle();
+    }
 
 
     /**

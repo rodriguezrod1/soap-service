@@ -2,12 +2,11 @@
 
 namespace App\Services\Wallet;
 
-use App\Models\Wallet;
 
 class RechargeWalletService
 {
 
-    public function rechargeWallet($client, $amount)
+    public function execute($client, $amount)
     {
         $currentBalance = $client->wallet->balance ?? 0;
 

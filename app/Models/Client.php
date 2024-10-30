@@ -16,11 +16,12 @@ class Client extends Model
         'document',
         'name',
         'email',
-        'phone'
+        'phone',
+        'balance'
     ];
 
-    public function wallet()
+    public function transactions()
     {
-        return $this->hasOne(Wallet::class);
+        return $this->hasMany(Transaction::class);
     }
 }

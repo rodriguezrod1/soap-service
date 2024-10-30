@@ -2,18 +2,18 @@
 
 namespace App\Services\Client;
 
-use App\Models\{Client, Wallet};
+use App\Models\Client;
 
 class StoreService
 {
-    public function store($request)
+    public function execute($request)
     {
         $client = new Client();
         $client->name = $request->name;
         $client->email = $request->email;
         $client->phone = $request->phone;
+        $client->balance = 0;
         $client->save();
-        Wallet::create(['client_id' => $client->id, 'balance' => 0]);
         return $client;
     }
 }

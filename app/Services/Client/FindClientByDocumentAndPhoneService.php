@@ -6,7 +6,7 @@ use App\Models\Client;
 
 class FindClientByDocumentAndPhoneService
 {
-    public function findClientByDocumentAndPhone($document, $phone)
+    public function execute($document, $phone)
     {
         return Client::where('document', $document)->where('phone', $phone)->first();
     }
