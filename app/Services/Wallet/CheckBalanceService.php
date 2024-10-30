@@ -22,6 +22,6 @@ class CheckBalanceService
             throw new \Exception('Cliente no encontrado');
         }
 
-        return $client->wallet->balance;
+        return $client->balance;
     }
 }

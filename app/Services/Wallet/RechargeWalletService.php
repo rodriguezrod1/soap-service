@@ -2,22 +2,34 @@
 
 namespace App\Services\Wallet;
 
+use App\Services\Client\FindClientByDocumentAndPhoneService;
 
 class RechargeWalletService
 {
 
-    public function execute($client, $amount)
-    {
-        $currentBalance = $client->wallet->balance ?? 0;
+    private $clientFinder;
 
-        if ($currentBalance + $amount > 1000000) {
+    public function __construct(FindClientByDocumentAndPhoneService $clientFinder)
+    {
+        $this->clientFinder = $clientFinder;
+    }
+
+
+    public function execute($document, $phone, $amount)
+    {
+        $client = $this->clientFinder->execute($document, $phone);
+
+        if (!$client) {
+            throw new \Exception('Cliente no encontrado');
+        }
+
+        if ($client->balance + $amount > 1000000) {
             throw new \Exception('Excedió el límite máximo de saldo');
         }
 
-        $newBalance = $currentBalance + $amount;
+        $client->balance += $amount;
+        $client->save();
 
-        $client->wallet()->update(['balance' => $newBalance]);
-
-        return  $newBalance;
+        return  $client;
     }
 }

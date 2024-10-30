@@ -27,7 +27,7 @@ class PaymentTokenMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Payment Token Mail',
+            subject: 'Token de pago por correo',
         );
     }
 

@@ -21,26 +21,24 @@ class ConfirmPaymentService
         $storedToken = Cache::get("payment_token_{$sessionId}");
 
         if (!$storedToken || $storedToken != $token) {
-            throw new \Exception('Invalid token or session expired');
+            throw new \Exception('Token no válido o sesión expirada');
         }
 
         $client = $this->clientFinder->execute($document, $phone);
 
         if (!$client) {
-            throw new \Exception('Client not found');
+            throw new \Exception('Cliente no encoentrado');
         }
 
-        $wallet = $client->wallet;
-        if ($wallet->balance < $amount) {
-            throw new \Exception('Insufficient balance');
+        if ($client->balance < $amount) {
+            throw new \Exception('Saldo insuficiente');
         }
 
-        $wallet->balance -= $amount;
-        $wallet->save();
+        $client->balance -= $amount;
+        $client->save();
 
-        // Eliminar el token de la caché después de su uso
         Cache::forget("payment_token_{$sessionId}");
 
-        return $wallet;
+        return $client;
     }
 }
