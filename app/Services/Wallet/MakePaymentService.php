@@ -6,6 +6,7 @@ use App\Services\Client\FindClientByDocumentAndPhoneService;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 use App\Mail\PaymentTokenMail;
+use App\Jobs\SendPaymentTokenEmailJob;
 
 
 class MakePaymentService
@@ -33,8 +34,8 @@ class MakePaymentService
         $token = rand(100000, 999999);
         $sessionId = uniqid();
 
-        Mail::to($client->email)->send(new PaymentTokenMail($token));
-
+        // Dispatch the job to send the email
+        SendPaymentTokenEmailJob::dispatch($client->email, $token);
 
         Cache::put("payment_token_{$sessionId}", $token, now()->addMinutes(10));
 

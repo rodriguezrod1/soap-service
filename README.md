@@ -57,6 +57,8 @@ El servidor SOAP incluye las siguientes operaciones:
    Puedes ejecutar el servidor embebido de Laravel para propósitos de desarrollo:
 
    ```bash
+   php artisan queue:table
+   php artisan migrate
    php artisan serve
    ```
 
@@ -93,6 +95,6 @@ Los errores generados por el servidor SOAP se devolverán como un mensaje de err
 
 ## Licencia
 
-Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para obtener más detalles.
+Este proyecto está bajo la Licencia MIT.
 
 
